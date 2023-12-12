@@ -1,0 +1,17 @@
+import { redirect } from "next/navigation"
+
+import db from "@/lib/db"
+
+export default async function SetupLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const store = await db.store.findFirst()
+
+  if (store) {
+    redirect(`/${store.id}`)
+  }
+
+  return <>{children}</>
+}

@@ -5,13 +5,19 @@ import db from "@/lib/db"
 
 export default async function DashboardLayout({
   children,
+  params,
 }: {
   children: React.ReactNode
+  params: { storeId: string }
 }) {
-  const store = await db.store.findFirst()
+  const store = await db.store.findUnique({
+    where: {
+      id: params.storeId,
+    },
+  })
 
   if (!store) {
-    redirect("/setup")
+    redirect("/")
   }
 
   return (

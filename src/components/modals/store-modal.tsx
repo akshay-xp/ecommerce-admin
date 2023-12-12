@@ -1,9 +1,9 @@
 "use client"
 
 import * as z from "zod"
+import axios from "axios"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import axios from "axios"
 import { useRouter } from "next/navigation"
 
 import { Modal } from "@/components/ui/modal"
@@ -43,8 +43,8 @@ export const StoreModal = () => {
       description: "Store created!",
     })
     storeModal.onClose()
-    router.push("/")
     router.refresh()
+    router.push("/")
   }
 
   return (

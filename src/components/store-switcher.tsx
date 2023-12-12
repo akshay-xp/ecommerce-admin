@@ -20,33 +20,38 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { useStoreModal } from "@/hooks/use-store-modal"
-
-const stores = [
-  {
-    label: "Clothes Store",
-    value: "acme-inc",
-  },
-  {
-    label: "Tech Store",
-    value: "monsters",
-  },
-  {
-    label: "Pet Store",
-    value: "pets",
-  },
-]
-
-type Store = (typeof stores)[number]
+import { useParams, useRouter } from "next/navigation"
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>
 
-interface StoreSwitcherProps extends PopoverTriggerProps {}
+interface StoreSwitcherProps extends PopoverTriggerProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  items: Record<string, any>[]
+}
 
-export default function StoreSwitcher({ className }: StoreSwitcherProps) {
+export default function StoreSwitcher({
+  className,
+  items = [],
+}: StoreSwitcherProps) {
   const storeModal = useStoreModal()
+  const params = useParams()
+  const router = useRouter()
+
+  const formattedItems = items.map((item) => ({
+    label: item.name,
+    value: item.id,
+  }))
+
+  const currentStore = formattedItems.find(
+    (item) => item.value === params.storeId
+  )
 
   const [open, setOpen] = React.useState(false)
-  const [selectedStore, setSelectedStore] = React.useState<Store>(stores[0])
+
+  const onStoreSelect = (store: { value: string; label: string }) => {
+    setOpen(false)
+    router.push(`/${store.value}`)
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -60,7 +65,7 @@ export default function StoreSwitcher({ className }: StoreSwitcherProps) {
           className={cn("w-[200px] justify-between", className)}
         >
           <Store className="mr-2 h-4 w-4" />
-          {selectedStore.label}
+          {currentStore?.label}
           <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -70,13 +75,10 @@ export default function StoreSwitcher({ className }: StoreSwitcherProps) {
             <CommandInput placeholder="Search store..." />
             <CommandEmpty>No store found.</CommandEmpty>
             <CommandGroup heading="Stores">
-              {stores.map((store) => (
+              {formattedItems.map((store) => (
                 <CommandItem
                   key={store.value}
-                  onSelect={() => {
-                    setSelectedStore(store)
-                    setOpen(false)
-                  }}
+                  onSelect={() => onStoreSelect(store)}
                   className="text-sm"
                 >
                   <Store className="mr-2 h-4 w-4" />
@@ -84,7 +86,7 @@ export default function StoreSwitcher({ className }: StoreSwitcherProps) {
                   <Check
                     className={cn(
                       "ml-auto h-4 w-4",
-                      selectedStore.value === store.value
+                      currentStore?.value === store.value
                         ? "opacity-100"
                         : "opacity-0"
                     )}
