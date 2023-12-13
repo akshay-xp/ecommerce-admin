@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { auth } from "@clerk/nextjs"
 
 import db from "@/lib/db"
 
@@ -7,12 +8,29 @@ export async function POST(
   { params }: { params: { storeId: string } }
 ) {
   try {
+    const { userId } = auth()
+
     const body = await req.json()
 
     const { name, value } = body
 
+    if (!userId) {
+      return new NextResponse("Unauthenticated", { status: 403 })
+    }
+
     if (!name) {
       return new NextResponse("Name is required", { status: 400 })
+    }
+
+    const storeByUserId = await db.store.findFirst({
+      where: {
+        id: params.storeId,
+        userId,
+      },
+    })
+
+    if (!storeByUserId) {
+      return new NextResponse("Unauthorized", { status: 405 })
     }
 
     if (!value) {

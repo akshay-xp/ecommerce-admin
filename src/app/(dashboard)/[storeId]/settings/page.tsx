@@ -1,13 +1,21 @@
 import { redirect } from "next/navigation"
+import { auth } from "@clerk/nextjs"
 
 import db from "@/lib/db"
 
 import { SettingsForm } from "./components/settings-form"
 
 const SettingsPage = async ({ params }: { params: { storeId: string } }) => {
-  const store = await db.store.findUnique({
+  const { userId } = auth()
+
+  if (!userId) {
+    redirect("/sign-in")
+  }
+
+  const store = await db.store.findFirst({
     where: {
       id: params.storeId,
+      userId,
     },
   })
 

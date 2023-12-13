@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { auth } from "@clerk/nextjs"
 
 import db from "@/lib/db"
 
@@ -25,11 +26,28 @@ export async function GET(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { categoryId: string } }
+  { params }: { params: { categoryId: string; storeId: string } }
 ) {
   try {
+    const { userId } = auth()
+
+    if (!userId) {
+      return new NextResponse("Unauthenticated", { status: 403 })
+    }
+
     if (!params.categoryId) {
       return new NextResponse("Category id is required", { status: 400 })
+    }
+
+    const storeByUserId = await db.store.findFirst({
+      where: {
+        id: params.storeId,
+        userId,
+      },
+    })
+
+    if (!storeByUserId) {
+      return new NextResponse("Unauthorized", { status: 405 })
     }
 
     const category = await db.category.delete({
@@ -46,12 +64,18 @@ export async function DELETE(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { categoryId: string } }
+  { params }: { params: { categoryId: string; storeId: string } }
 ) {
   try {
+    const { userId } = auth()
+
     const body = await req.json()
 
     const { name } = body
+
+    if (!userId) {
+      return new NextResponse("Unauthenticated", { status: 403 })
+    }
 
     if (!name) {
       return new NextResponse("Name is required", { status: 400 })
@@ -59,6 +83,17 @@ export async function PATCH(
 
     if (!params.categoryId) {
       return new NextResponse("Category id is required", { status: 400 })
+    }
+
+    const storeByUserId = await db.store.findFirst({
+      where: {
+        id: params.storeId,
+        userId,
+      },
+    })
+
+    if (!storeByUserId) {
+      return new NextResponse("Unauthorized", { status: 405 })
     }
 
     const category = await db.category.update({
