@@ -36,18 +36,27 @@ export const SizesClient: React.FC<SizesClientProps> = ({ data }) => {
       <Separator />
       <ApiAlert
         title="GET"
+        variant="public"
         description={`${window.location.origin}/api/${params.storeId}/sizes`}
       />
       <ApiAlert
+        title="GET"
+        variant="public"
+        description={`${window.location.origin}/api/${params.storeId}/sizes/{sizeId}`}
+      />
+      <ApiAlert
         title="POST"
+        variant="admin"
         description={`${window.location.origin}/api/${params.storeId}/sizes`}
       />
       <ApiAlert
         title="PATCH"
+        variant="admin"
         description={`${window.location.origin}/api/${params.storeId}/sizes/{sizeId}`}
       />
       <ApiAlert
         title="DELETE"
+        variant="admin"
         description={`${window.location.origin}/api/${params.storeId}/sizes/{sizeId}`}
       />
     </>

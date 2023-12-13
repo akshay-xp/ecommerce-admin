@@ -36,18 +36,27 @@ export const ColorClient: React.FC<ColorClientProps> = ({ data }) => {
       <Separator />
       <ApiAlert
         title="GET"
+        variant="public"
         description={`${window.location.origin}/api/${params.storeId}/colors`}
       />
       <ApiAlert
+        title="GET"
+        variant="public"
+        description={`${window.location.origin}/api/${params.storeId}/colors/{colorId}`}
+      />
+      <ApiAlert
         title="POST"
+        variant="admin"
         description={`${window.location.origin}/api/${params.storeId}/colors`}
       />
       <ApiAlert
         title="PATCH"
+        variant="admin"
         description={`${window.location.origin}/api/${params.storeId}/colors/{colorId}`}
       />
       <ApiAlert
         title="DELETE"
+        variant="admin"
         description={`${window.location.origin}/api/${params.storeId}/colors/{colorId}`}
       />
     </>

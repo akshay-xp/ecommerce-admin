@@ -36,18 +36,27 @@ export const ProductsClient: React.FC<ProductsClientProps> = ({ data }) => {
       <Separator />
       <ApiAlert
         title="GET"
+        variant="public"
         description={`${window.location.origin}/api/${params.storeId}/products`}
       />
       <ApiAlert
+        title="GET"
+        variant="public"
+        description={`${window.location.origin}/api/${params.storeId}/products/{productId}`}
+      />
+      <ApiAlert
         title="POST"
+        variant="admin"
         description={`${window.location.origin}/api/${params.storeId}/products`}
       />
       <ApiAlert
         title="PATCH"
+        variant="admin"
         description={`${window.location.origin}/api/${params.storeId}/products/{productId}`}
       />
       <ApiAlert
         title="DELETE"
+        variant="admin"
         description={`${window.location.origin}/api/${params.storeId}/products/{productId}`}
       />
     </>
