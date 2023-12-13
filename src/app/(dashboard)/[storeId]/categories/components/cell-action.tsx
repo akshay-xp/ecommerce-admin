@@ -28,7 +28,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const params = useParams()
   const categoryModal = useCategoryModal()
   const { toast } = useToast()
-  const [isOpen, setIsOpen] = useState(false)
+  const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const onConfirm = async () => {
@@ -36,15 +36,15 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     await axios.delete(`/api/${params.storeId}/categories/${data.id}`)
     toast({ description: "Category deleted." })
     router.refresh()
-    setIsOpen(false)
+    setOpen(false)
     setLoading(false)
   }
 
   return (
     <>
       <AlertModal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
+        isOpen={open}
+        onClose={() => setOpen(false)}
         onConfirm={onConfirm}
         loading={loading}
       />
@@ -60,7 +60,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem onClick={() => categoryModal.onEdit(data.id)}>
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setIsOpen(true)}>
+          <DropdownMenuItem onClick={() => setOpen(true)}>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
