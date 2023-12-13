@@ -11,7 +11,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useCategoryModal } from "@/hooks/use-category-modal"
 import { AlertModal } from "@/components/modals/alert-modal"
 
 import { CategoryColumn } from "./columns"
@@ -26,18 +25,27 @@ interface CellActionProps {
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter()
   const params = useParams()
-  const categoryModal = useCategoryModal()
   const { toast } = useToast()
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const onConfirm = async () => {
-    setLoading(true)
-    await axios.delete(`/api/${params.storeId}/categories/${data.id}`)
-    toast({ description: "Category deleted." })
-    router.refresh()
-    setOpen(false)
-    setLoading(false)
+    try {
+      setLoading(true)
+      await axios.delete(`/api/${params.storeId}/categories/${data.id}`)
+      toast({ description: "Category deleted." })
+
+      router.refresh()
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        description:
+          "Make sure you removed all products using this category first.",
+      })
+    } finally {
+      setOpen(false)
+      setLoading(false)
+    }
   }
 
   return (
@@ -57,7 +65,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => categoryModal.onEdit(data.id)}>
+          <DropdownMenuItem
+            onClick={() =>
+              router.push(`/${params.storeId}/categories/${data.id}`)
+            }
+          >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpen(true)}>

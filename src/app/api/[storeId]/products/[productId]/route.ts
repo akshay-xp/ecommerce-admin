@@ -40,7 +40,48 @@ export async function DELETE(
 
     return NextResponse.json(product)
   } catch (error) {
-    console.log(error)
+    return new NextResponse("Internal error", { status: 500 })
+  }
+}
+
+export async function PATCH(
+  req: Request,
+  { params }: { params: { productId: string } }
+) {
+  try {
+    const body = await req.json()
+
+    const { name, price, categoryId } = body
+
+    if (!params.productId) {
+      return new NextResponse("Product id is required", { status: 400 })
+    }
+
+    if (!name) {
+      return new NextResponse("Name is required", { status: 400 })
+    }
+
+    if (!price) {
+      return new NextResponse("Price is required", { status: 400 })
+    }
+
+    if (!categoryId) {
+      return new NextResponse("Category id is required", { status: 400 })
+    }
+
+    const product = await db.product.update({
+      where: {
+        id: params.productId,
+      },
+      data: {
+        name,
+        price,
+        categoryId,
+      },
+    })
+
+    return NextResponse.json(product)
+  } catch (error) {
     return new NextResponse("Internal error", { status: 500 })
   }
 }

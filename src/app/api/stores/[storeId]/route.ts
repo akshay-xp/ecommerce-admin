@@ -2,7 +2,7 @@ import { NextResponse } from "next/server"
 
 import db from "@/lib/db"
 
-export async function POST(
+export async function PATCH(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
@@ -19,20 +19,22 @@ export async function POST(
       return new NextResponse("Store id is required", { status: 400 })
     }
 
-    const category = await db.category.create({
+    const store = await db.store.update({
+      where: {
+        id: params.storeId,
+      },
       data: {
         name,
-        storeId: params.storeId,
       },
     })
 
-    return NextResponse.json(category)
+    return NextResponse.json(store)
   } catch (error) {
     return new NextResponse("Internal error", { status: 500 })
   }
 }
 
-export async function GET(
+export async function DELETE(
   req: Request,
   { params }: { params: { storeId: string } }
 ) {
@@ -41,13 +43,13 @@ export async function GET(
       return new NextResponse("Store id is required", { status: 400 })
     }
 
-    const categories = await db.category.findMany({
+    const store = await db.store.delete({
       where: {
-        storeId: params.storeId,
+        id: params.storeId,
       },
     })
 
-    return NextResponse.json(categories)
+    return NextResponse.json(store)
   } catch (error) {
     return new NextResponse("Internal error", { status: 500 })
   }
