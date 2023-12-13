@@ -10,6 +10,9 @@ const BillboardsPage = async ({ params }: { params: { storeId: string } }) => {
     where: {
       storeId: params.storeId,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   })
 
   const formattedBillboards: BillboardColumn[] = billboards.map((item) => ({

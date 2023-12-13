@@ -10,6 +10,9 @@ const SizesPage = async ({ params }: { params: { storeId: string } }) => {
     where: {
       storeId: params.storeId,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   })
 
   const formattedSizes: SizeColumn[] = sizes.map((item) => ({

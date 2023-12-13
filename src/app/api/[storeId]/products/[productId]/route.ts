@@ -56,17 +56,6 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 405 })
     }
 
-    await db.product.update({
-      where: {
-        id: params.productId,
-      },
-      data: {
-        images: {
-          deleteMany: {},
-        },
-      },
-    })
-
     const product = await db.product.delete({
       where: {
         id: params.productId,
@@ -88,8 +77,16 @@ export async function PATCH(
 
     const body = await req.json()
 
-    const { name, price, categoryId, images, colorId, sizeId, isFeatured } =
-      body
+    const {
+      name,
+      price,
+      categoryId,
+      images,
+      colorId,
+      sizeId,
+      isFeatured,
+      isArchived,
+    } = body
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 })
@@ -148,6 +145,7 @@ export async function PATCH(
           deleteMany: {},
         },
         isFeatured,
+        isArchived,
       },
     })
 

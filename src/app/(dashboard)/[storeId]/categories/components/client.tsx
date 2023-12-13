@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/ui/data-table"
 import { Heading } from "@/components/ui/heading"
 import { Separator } from "@/components/ui/separator"
-import { ApiAlert } from "@/components/ui/api-alert"
 
 import { columns, CategoryColumn } from "./columns"
+import { ApiList } from "@/components/ui/api-list"
 
 interface CategoriesClientProps {
   data: CategoryColumn[]
@@ -36,31 +36,7 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
       <DataTable searchKey="name" columns={columns} data={data} />
       <Heading title="API" description="API Calls for Categories" />
       <Separator />
-      <ApiAlert
-        title="GET"
-        variant="public"
-        description={`/api/${params.storeId}/categories`}
-      />
-      <ApiAlert
-        title="GET"
-        variant="public"
-        description={`/api/${params.storeId}/categories/{categoryId}`}
-      />
-      <ApiAlert
-        title="POST"
-        variant="admin"
-        description={`/api/${params.storeId}/categories`}
-      />
-      <ApiAlert
-        title="PATCH"
-        variant="admin"
-        description={`/api/${params.storeId}/categories/{categoryId}`}
-      />
-      <ApiAlert
-        title="DELETE"
-        variant="admin"
-        description={`/api/${params.storeId}/categories/{categoryId}`}
-      />
+      <ApiList entityName="categories" entityIdName="categoryId" />
     </>
   )
 }
