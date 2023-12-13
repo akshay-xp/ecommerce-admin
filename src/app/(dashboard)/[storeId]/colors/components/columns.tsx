@@ -4,42 +4,27 @@ import { ColumnDef } from "@tanstack/react-table"
 
 import { CellAction } from "./cell-action"
 
-export type ProductColumn = {
+export type ColorColumn = {
   id: string
   name: string
-  price: string
-  category: string
-  size: string
-  color: string
+  value: string
   createdAt: string
 }
 
-export const columns: ColumnDef<ProductColumn>[] = [
+export const columns: ColumnDef<ColorColumn>[] = [
   {
     accessorKey: "name",
     header: "Name",
   },
   {
-    accessorKey: "price",
-    header: "Price",
-  },
-  {
-    accessorKey: "category",
-    header: "Category",
-  },
-  {
-    accessorKey: "size",
-    header: "Size",
-  },
-  {
-    accessorKey: "color",
-    header: "Color",
+    accessorKey: "value",
+    header: "Value",
     cell: ({ row }) => (
       <div className="flex items-center gap-x-2">
-        {row.original.color}
+        {row.original.value}
         <div
           className="h-6 w-6 rounded-full border"
-          style={{ backgroundColor: row.original.color }}
+          style={{ backgroundColor: row.original.value }}
         />
       </div>
     ),

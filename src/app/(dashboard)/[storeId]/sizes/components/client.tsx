@@ -9,13 +9,13 @@ import { Heading } from "@/components/ui/heading"
 import { Separator } from "@/components/ui/separator"
 import { ApiAlert } from "@/components/ui/api-alert"
 
-import { columns, CategoryColumn } from "./columns"
+import { columns, SizeColumn } from "./columns"
 
-interface CategoriesClientProps {
-  data: CategoryColumn[]
+interface SizesClientProps {
+  data: SizeColumn[]
 }
 
-export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
+export const SizesClient: React.FC<SizesClientProps> = ({ data }) => {
   const params = useParams()
   const router = useRouter()
 
@@ -23,34 +23,32 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`Categories (${data.length})`}
-          description="Manage categories for your store"
+          title={`Sizes (${data.length})`}
+          description="Manage sizes for your products"
         />
-        <Button
-          onClick={() => router.push(`/${params.storeId}/categories/new`)}
-        >
+        <Button onClick={() => router.push(`/${params.storeId}/sizes/new`)}>
           <Plus className="mr-2 h-4 w-4" /> Add New
         </Button>
       </div>
       <Separator />
       <DataTable searchKey="name" columns={columns} data={data} />
-      <Heading title="API" description="API Calls for Categories" />
+      <Heading title="API" description="API Calls for Sizes" />
       <Separator />
       <ApiAlert
         title="GET"
-        description={`${window.location.origin}/api/${params.storeId}/categories`}
+        description={`${window.location.origin}/api/${params.storeId}/sizes`}
       />
       <ApiAlert
         title="POST"
-        description={`${window.location.origin}/api/${params.storeId}/categories`}
+        description={`${window.location.origin}/api/${params.storeId}/sizes`}
       />
       <ApiAlert
         title="PATCH"
-        description={`${window.location.origin}/api/${params.storeId}/categories/{categoryId}`}
+        description={`${window.location.origin}/api/${params.storeId}/sizes/{sizeId}`}
       />
       <ApiAlert
         title="DELETE"
-        description={`${window.location.origin}/api/${params.storeId}/categories/{categoryId}`}
+        description={`${window.location.origin}/api/${params.storeId}/sizes/{sizeId}`}
       />
     </>
   )

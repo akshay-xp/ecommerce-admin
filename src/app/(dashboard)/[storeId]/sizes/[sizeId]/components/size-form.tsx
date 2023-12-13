@@ -5,8 +5,9 @@ import axios from "axios"
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { useToast } from "@/components/ui/use-toast"
 import { Trash } from "lucide-react"
-import { Category } from "@prisma/client"
+import { Size } from "@prisma/client"
 import { useParams, useRouter } from "next/navigation"
 
 import { Input } from "@/components/ui/input"
@@ -22,19 +23,19 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { Heading } from "@/components/ui/heading"
 import { AlertModal } from "@/components/modals/alert-modal"
-import { useToast } from "@/components/ui/use-toast"
 
 const formSchema = z.object({
   name: z.string().min(2),
+  value: z.string().min(1).max(3),
 })
 
-type CategoryFormValues = z.infer<typeof formSchema>
+type SizeFormValues = z.infer<typeof formSchema>
 
-interface CategoryFormProps {
-  initialData: Category | null
+interface SizeFormProps {
+  initialData: Size | null
 }
 
-export const CategoryForm: React.FC<CategoryFormProps> = ({ initialData }) => {
+export const SizeForm: React.FC<SizeFormProps> = ({ initialData }) => {
   const params = useParams()
   const router = useRouter()
   const { toast } = useToast()
@@ -42,34 +43,31 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ initialData }) => {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const title = initialData ? "Edit category" : "Create category"
-  const description = initialData ? "Edit a category." : "Add a new category"
-  const toastMessage = initialData ? "Category updated." : "Category created."
+  const title = initialData ? "Edit size" : "Create size"
+  const description = initialData ? "Edit a size." : "Add a new size"
+  const toastMessage = initialData ? "Size updated." : "Size created."
   const action = initialData ? "Save changes" : "Create"
 
-  const form = useForm<CategoryFormValues>({
+  const form = useForm<SizeFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
       name: "",
     },
   })
 
-  const onSubmit = async (data: CategoryFormValues) => {
+  const onSubmit = async (data: SizeFormValues) => {
     try {
       setLoading(true)
       if (initialData) {
-        await axios.patch(
-          `/api/${params.storeId}/categories/${params.categoryId}`,
-          data
-        )
+        await axios.patch(`/api/${params.storeId}/sizes/${params.sizeId}`, data)
       } else {
-        await axios.post(`/api/${params.storeId}/categories`, data)
+        await axios.post(`/api/${params.storeId}/sizes`, data)
       }
       router.refresh()
-      router.push(`/${params.storeId}/categories`)
+      router.push(`/${params.storeId}/sizes`)
       toast({ description: toastMessage })
     } catch (error) {
-      toast({ description: "Something went wrong.", variant: "destructive" })
+      toast({ variant: "destructive", description: "Something went wrong." })
     } finally {
       setLoading(false)
     }
@@ -78,17 +76,15 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true)
-      await axios.delete(
-        `/api/${params.storeId}/categories/${params.categoryId}`
-      )
+      await axios.delete(`/api/${params.storeId}/sizes/${params.sizeId}`)
       router.refresh()
-      router.push(`/${params.storeId}/categories`)
-      toast({ description: "Category deleted." })
+      router.push(`/${params.storeId}/sizes`)
+      toast({ description: "Size deleted." })
     } catch (error) {
       toast({
-        description:
-          "Make sure you removed all products using this category first.",
         variant: "destructive",
+        description:
+          "Make sure you removed all products using this size first.",
       })
     } finally {
       setLoading(false)
@@ -133,7 +129,24 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({ initialData }) => {
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Category name"
+                      placeholder="Size name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="value"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Value</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Size value"
                       {...field}
                     />
                   </FormControl>
