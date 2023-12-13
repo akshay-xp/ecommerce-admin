@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -69,7 +68,7 @@ export const StoreModal = () => {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Username</FormLabel>
+                      <FormLabel>Name</FormLabel>
                       <FormControl>
                         <Input
                           disabled={loading}
@@ -77,9 +76,6 @@ export const StoreModal = () => {
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription>
-                        This is your public display name.
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

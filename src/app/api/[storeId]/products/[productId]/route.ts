@@ -16,6 +16,12 @@ export async function GET(
       where: {
         id: params.productId,
       },
+      include: {
+        images: true,
+        category: true,
+        size: true,
+        color: true,
+      },
     })
 
     return NextResponse.json(product)
@@ -82,7 +88,8 @@ export async function PATCH(
 
     const body = await req.json()
 
-    const { name, price, categoryId, images, colorId, sizeId } = body
+    const { name, price, categoryId, images, colorId, sizeId, isFeatured } =
+      body
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 })
@@ -140,6 +147,7 @@ export async function PATCH(
         images: {
           deleteMany: {},
         },
+        isFeatured,
       },
     })
 

@@ -5,23 +5,20 @@ import db from "@/lib/db"
 
 export async function GET(
   req: Request,
-  { params }: { params: { categoryId: string } }
+  { params }: { params: { billboardId: string } }
 ) {
   try {
-    if (!params.categoryId) {
-      return new NextResponse("Category id is required", { status: 400 })
+    if (!params.billboardId) {
+      return new NextResponse("Billboard id is required", { status: 400 })
     }
 
-    const category = await db.category.findUnique({
+    const billboard = await db.billboard.findUnique({
       where: {
-        id: params.categoryId,
-      },
-      include: {
-        billboard: true,
+        id: params.billboardId,
       },
     })
 
-    return NextResponse.json(category)
+    return NextResponse.json(billboard)
   } catch (error) {
     return new NextResponse("Internal error", { status: 500 })
   }
@@ -29,7 +26,7 @@ export async function GET(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { categoryId: string; storeId: string } }
+  { params }: { params: { billboardId: string; storeId: string } }
 ) {
   try {
     const { userId } = auth()
@@ -38,8 +35,8 @@ export async function DELETE(
       return new NextResponse("Unauthenticated", { status: 403 })
     }
 
-    if (!params.categoryId) {
-      return new NextResponse("Category id is required", { status: 400 })
+    if (!params.billboardId) {
+      return new NextResponse("Billboard id is required", { status: 400 })
     }
 
     const storeByUserId = await db.store.findFirst({
@@ -53,13 +50,13 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 405 })
     }
 
-    const category = await db.category.delete({
+    const billboard = await db.billboard.delete({
       where: {
-        id: params.categoryId,
+        id: params.billboardId,
       },
     })
 
-    return NextResponse.json(category)
+    return NextResponse.json(billboard)
   } catch (error) {
     return new NextResponse("Internal error", { status: 500 })
   }
@@ -67,29 +64,29 @@ export async function DELETE(
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { categoryId: string; storeId: string } }
+  { params }: { params: { billboardId: string; storeId: string } }
 ) {
   try {
     const { userId } = auth()
 
     const body = await req.json()
 
-    const { name, billboardId } = body
+    const { label, imageUrl } = body
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 })
     }
 
-    if (!billboardId) {
-      return new NextResponse("Billboard ID is required", { status: 400 })
+    if (!label) {
+      return new NextResponse("Label is required", { status: 400 })
     }
 
-    if (!name) {
-      return new NextResponse("Name is required", { status: 400 })
+    if (!imageUrl) {
+      return new NextResponse("Image URL is required", { status: 400 })
     }
 
-    if (!params.categoryId) {
-      return new NextResponse("Category id is required", { status: 400 })
+    if (!params.billboardId) {
+      return new NextResponse("Billboard id is required", { status: 400 })
     }
 
     const storeByUserId = await db.store.findFirst({
@@ -103,17 +100,17 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 405 })
     }
 
-    const category = await db.category.update({
+    const billboard = await db.billboard.update({
       where: {
-        id: params.categoryId,
+        id: params.billboardId,
       },
       data: {
-        name,
-        billboardId,
+        label,
+        imageUrl,
       },
     })
 
-    return NextResponse.json(category)
+    return NextResponse.json(billboard)
   } catch (error) {
     return new NextResponse("Internal error", { status: 500 })
   }

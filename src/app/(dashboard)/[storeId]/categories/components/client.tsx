@@ -39,27 +39,27 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
       <ApiAlert
         title="GET"
         variant="public"
-        description={`${window.location.origin}/api/${params.storeId}/categories`}
+        description={`/api/${params.storeId}/categories`}
       />
       <ApiAlert
         title="GET"
         variant="public"
-        description={`${window.location.origin}/api/${params.storeId}/categories/{categoryId}`}
+        description={`/api/${params.storeId}/categories/{categoryId}`}
       />
       <ApiAlert
         title="POST"
         variant="admin"
-        description={`${window.location.origin}/api/${params.storeId}/categories`}
+        description={`/api/${params.storeId}/categories`}
       />
       <ApiAlert
         title="PATCH"
         variant="admin"
-        description={`${window.location.origin}/api/${params.storeId}/categories/{categoryId}`}
+        description={`/api/${params.storeId}/categories/{categoryId}`}
       />
       <ApiAlert
         title="DELETE"
         variant="admin"
-        description={`${window.location.origin}/api/${params.storeId}/categories/{categoryId}`}
+        description={`/api/${params.storeId}/categories/{categoryId}`}
       />
     </>
   )
