@@ -12,6 +12,7 @@
     "turbo": "next dev --turbo",
     "start": "next start",
     "lint": "next lint",
+    "postinstall": "prisma generate",
     "prepare": "husky install",
     "prettify": "prettier --write .",
     "commit": "git-cz",

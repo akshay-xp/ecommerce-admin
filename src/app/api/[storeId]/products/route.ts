@@ -120,6 +120,9 @@ export async function GET(
         color: true,
         size: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     })
 
     return NextResponse.json(products)
